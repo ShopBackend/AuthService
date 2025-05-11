@@ -15,7 +15,7 @@ class AuthenticateAndGenerateToken {
         this.jwtService = jwtService
     }
 
-    async execute(user: IUser) {
+    async execute(user: Omit<IUser, 'id' | 'username'>) {
         const existingUser = await this.userRepository.findByEmail(user.email);
 
         if (!existingUser)
@@ -26,7 +26,7 @@ class AuthenticateAndGenerateToken {
         if (!isPasswordValid)
             throw new InvalidAuthentication();
 
-        const { accessToken, refreshToken, refreshTokenId } = this.jwtService.generateTokens(user.id);
+        const { accessToken, refreshToken } = this.jwtService.generateTokens(existingUser.id);
         // todo handle refreshTokenId in the database
 
         return { accessToken, refreshToken };
