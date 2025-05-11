@@ -1,8 +1,9 @@
-import { IUser } from '../../domain/entities/user.js';
-import { UserRepository } from '../../domain/repositories/UserRepository.js';
-import InvalidAuthentication from './errors/InvalidAuthentication.js';
-import JWTService from '../services/JWTService.js';
-import PasswordVerificationService from '../services/PasswordService.js';
+import { IUser } from '../../domain/entities/user';
+import { UserRepository } from '../../domain/repositories/UserRepository';
+import InvalidAuthentication from './errors/InvalidAuthentication';
+import JWTService from '../services/JWTService';
+import PasswordVerificationService from '../services/PasswordService';
+import validate from "../validators/AuthenticateAndGenerateTokenValidator";
 
 class AuthenticateAndGenerateToken {
     jwtService: JWTService;
@@ -15,19 +16,21 @@ class AuthenticateAndGenerateToken {
         this.jwtService = jwtService
     }
 
-    async execute(user: Omit<IUser, 'id' | 'username'>) {
-        const existingUser = await this.userRepository.findByEmail(user.email);
+    async execute(userData: Omit<IUser, 'id' | 'username'>) {
+        validate(userData);
+
+        const existingUser = await this.userRepository.findByEmail(userData.email);
 
         if (!existingUser)
             throw new InvalidAuthentication();
 
-        const isPasswordValid = await this.passwordVerificationService.verifyPassword(user.password, existingUser.password);
+        const isPasswordValid = await this.passwordVerificationService.verifyPassword(userData.password, existingUser.password);
 
         if (!isPasswordValid)
             throw new InvalidAuthentication();
 
         const { accessToken, refreshToken } = this.jwtService.generateTokens(existingUser.id);
-        // todo handle refreshTokenId in the database
+        // todo handle refreshTokenId in the database refresh_token:12345:web      → <hashed-token> (7d TTL)
 
         return { accessToken, refreshToken };
     }
