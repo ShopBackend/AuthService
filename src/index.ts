@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 let server: http.Server;
 
 const startServer = async (): Promise<void> => {

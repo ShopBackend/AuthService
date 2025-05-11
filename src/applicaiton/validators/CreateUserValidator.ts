@@ -1,18 +1,18 @@
-import { Omit } from "utility-types"; // if not available, just define Omit manually
-import { IUser } from "../../domain/entities/user";
+import InvalidEmailError from "./errors/InvalidEmailError";
+import InvalidPasswordError from "./errors/InvalidPasswordError";
+import InvalidUserNameError from "./errors/InvalidUserNameError";
 
-export class UserValidator {
-    static validate(user: Omit<IUser, "id">): void {
-        if (!user.username || user.username.trim() === "") {
-            throw new Error("Username is required.");
-        }
+function validate(userData: any): void {
+    if (!userData.username || userData.username.trim() === "" || userData.username.length < 3 || userData.username.length > 12)
+        throw new InvalidUserNameError();
 
-        if (!user.email || !/^\S+@\S+\.\S+$/.test(user.email)) {
-            throw new Error("A valid email is required.");
-        }
+    if (!userData.email || !/^\S+@\S+\.\S+$/.test(userData.email))
+        throw new InvalidEmailError();
 
-        if (!user.password || user.password.length < 8) {
-            throw new Error("Password must be at least 8 characters long.");
-        }
-    }
+
+    if (!userData.password || userData.password.length < 8 || userData.password.length > 20)
+        throw new InvalidPasswordError();
+
 }
+
+export default validate;

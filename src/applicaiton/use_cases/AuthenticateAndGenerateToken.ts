@@ -1,6 +1,6 @@
 import { IUser } from '../../domain/entities/user.js';
 import { UserRepository } from '../../domain/repositories/UserRepository.js';
-import InvalidAuthentication from '../errors/InvalidAuthentication.js';
+import InvalidAuthentication from './errors/InvalidAuthentication.js';
 import JWTService from '../services/JWTService.js';
 import PasswordVerificationService from '../services/PasswordService.js';
 
