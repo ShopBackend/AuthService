@@ -13,6 +13,9 @@ class AuthController {
     #accessTokenCookieName;
     #refreshTokenCookieName;
 
+    #isSecure;
+
+
     constructor(createUser, authenticateAndGenerateToken) {
         this.createUser = createUser;
         this.authenticateAndGenerateToken = authenticateAndGenerateToken;
@@ -22,6 +25,8 @@ class AuthController {
 
         this.#accessTokenCookieName = process.env.ACCESS_TOKEN_COOKIE_NAME;
         this.#refreshTokenCookieName = process.env.REFRESH_TOKEN_COOKIE_NAME;
+
+        this.#isSecure = process.env.NODE_ENV === 'production';
     }
 
     async register(req, res) {
@@ -49,17 +54,20 @@ class AuthController {
         try {
             const { email, password } = req.body;
             const { accessToken, refreshToken } = await this.authenticateAndGenerateToken.execute({ email, password });
-
+            
             res.cookie(this.#accessTokenCookieName, accessToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: this.#isSecure,
                 maxAge: getMillisecondsFromExpiration(this.#accessTokenExpiration),
+                sameSite: 'Lax'
+
             });
 
             res.cookie(this.#refreshTokenCookieName, refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: this.#isSecure,
                 maxAge: getMillisecondsFromExpiration(this.#refreshTokenExpiration),
+                sameSite: 'Lax'
             });
 
             res.status(200).json({ message: 'Login successful' });
