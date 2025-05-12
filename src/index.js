@@ -41,8 +41,7 @@ const startServer = async () => {
 };
 
 const gracefulShutdown = async (signalOrError) => {
-  const errorMessage = signalOrError instanceof Error ? signalOrError.message : signalOrError;
-  console.error('Shutting down due to:', errorMessage);
+  console.error('Shutting down due to:', signalOrError);
 
   try {
     if (server) {

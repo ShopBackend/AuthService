@@ -17,7 +17,7 @@ class JWTService {
     generateTokens(userId) {
         const refreshTokenId = crypto.randomUUID();
 
-        const accessToken = jwt.sign({ userId }, this.#accessSecretToken, {
+        const accessToken = jwt.sign(userId, this.#accessSecretToken, {
             expiresIn: this.#accessTokenExpiration,
         });
 
@@ -36,14 +36,11 @@ class JWTService {
         };
     }
 
-    verifyToken(token, isRefreshToken = false) {
-        try {
-            const secretKey = isRefreshToken ? this.#refreshSecretToken : this.#accessSecretToken;
-            const decoded = jwt.verify(token, secretKey);
-            return decoded;
-        } catch (error) {
-            throw null;
-        }
+    verify(token, isRefreshToken = false) {
+        const secretKey = isRefreshToken ? this.#refreshSecretToken : this.#accessSecretToken;
+        const decoded = jwt.verify(token, secretKey);
+        return decoded;
+
     }
 }
 

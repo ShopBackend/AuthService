@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import dotenv from 'dotenv'; 
+import dotenv from 'dotenv';
 
 class EnvironmentLoader {
     constructor(options = {}) {

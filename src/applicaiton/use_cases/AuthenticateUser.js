@@ -1,11 +1,10 @@
 import InvalidAuthentication from './errors/InvalidAuthentication.js';
-import validate from "../validators/AuthenticateAndGenerateTokenValidator.js";
+import validate from "../validators/AuthenticateUserValidator.js";
 
-class AuthenticateAndGenerateToken {
-    constructor(userRepository, passwordService, jwtService) {
+class AuthenticateUser {
+    constructor(userRepository, passwordService) {
         this.userRepository = userRepository;
         this.passwordService = passwordService;
-        this.jwtService = jwtService;
     }
 
     async execute(userData) {
@@ -21,10 +20,10 @@ class AuthenticateAndGenerateToken {
         if (!isPasswordValid)
             throw new InvalidAuthentication();
 
-        const { accessToken, refreshToken } = this.jwtService.generateTokens(existingUser.id);
 
-        return { accessToken, refreshToken };
+        // todo generate tokens and push them to redis (the refresh token)
+        return existingUser.id;
     }
 }
 
-export default AuthenticateAndGenerateToken;
+export default AuthenticateUser;
