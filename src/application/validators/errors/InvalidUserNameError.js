@@ -1,7 +1,5 @@
 
 class InvalidUserNameError extends Error {
-    statusCode;
-
     constructor(message = 'Username must be at least 3 characters long and maximum 12 characters long.') {
         super(message);
         this.name = 'InvalidUserNameError';
