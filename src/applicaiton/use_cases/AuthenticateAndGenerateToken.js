@@ -2,9 +2,9 @@ import InvalidAuthentication from './errors/InvalidAuthentication.js';
 import validate from "../validators/AuthenticateAndGenerateTokenValidator.js";
 
 class AuthenticateAndGenerateToken {
-    constructor(userRepository, passwordVerificationService, jwtService) {
+    constructor(userRepository, passwordService, jwtService) {
         this.userRepository = userRepository;
-        this.passwordVerificationService = passwordVerificationService;
+        this.passwordService = passwordService;
         this.jwtService = jwtService;
     }
 
@@ -16,7 +16,7 @@ class AuthenticateAndGenerateToken {
         if (!existingUser)
             throw new InvalidAuthentication();
 
-        const isPasswordValid = await this.passwordVerificationService.verifyPassword(userData.password, existingUser.password);
+        const isPasswordValid = await this.passwordService.verifyPassword(userData.password, existingUser.password);
 
         if (!isPasswordValid)
             throw new InvalidAuthentication();

@@ -1,11 +1,10 @@
-import bcrypt from "bcrypt";
 import EmailAlreadyExists from "./errors/EmailAlreadyExists.js";
 import validate from "../validators/CreateUserValidator.js";
 
 class CreateUser {
-
-    constructor(userRepository) {
+    constructor(userRepository, passwordService) {
         this.userRepository = userRepository;
+        this.passwordService = passwordService;
     }
 
     async execute(user) {
@@ -16,7 +15,7 @@ class CreateUser {
             throw new EmailAlreadyExists();
 
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
+        const hashedPassword = await passwordService.hashedPassword(user.password);
         const hashedUser = {
             ...user,
             password: hashedPassword,

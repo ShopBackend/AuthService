@@ -1,7 +1,7 @@
 import { prisma } from '../../../shared/PrismaDbConfig.js';
 import { User } from '../../../domain/entities/user.js';
 
-class SqlUserRepository {
+class PrismaUserRepository {
     async create(data) {
         const user = await prisma.user.create({
             data: {
@@ -38,4 +38,4 @@ class SqlUserRepository {
     }
 }
 
-export default SqlUserRepository;
+export default PrismaUserRepository;
