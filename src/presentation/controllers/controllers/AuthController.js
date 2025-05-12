@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
-import EmailAlreadyExists from "../../../application/use_cases/errors/EmailAlreadyExists.js";
-import InvalidAuthentication from "../../../application/use_cases/errors/InvalidAuthentication.js";
+import EmailAlreadyExists from "../../../applicaiton/use_cases/errors/EmailAlreadyExists.js";
+import UsernameAlreadyInUse from "../../../applicaiton/use_cases/errors/UsernameAlreadyInUse.js";
+import InvalidAuthentication from "../../../applicaiton/use_cases/errors/InvalidAuthentication.js";
 import getMillisecondsFromExpiration from "../../Utils.js";
 
 class AuthController {
@@ -33,9 +34,8 @@ class AuthController {
             await this.createUser.execute({ username, email, password });
             res.status(201).json({ message: 'User created successfully' });
         } catch (error) {
-            if (error instanceof EmailAlreadyExists)
+            if (error instanceof EmailAlreadyExists || error instanceof UsernameAlreadyInUse)
                 return res.status(error.statusCode).json({ message: error.message });
-
             throw error;
         }
     }

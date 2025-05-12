@@ -13,6 +13,12 @@ function validate(userData) {
     if (!userData.password || userData.password.length < 8 || userData.password.length > 20)
         throw new InvalidPasswordError();
 
+    return {
+        email: userData.email,
+        username: userData.username,
+        password: userData.password,
+    };
+
 }
 
 export default validate;

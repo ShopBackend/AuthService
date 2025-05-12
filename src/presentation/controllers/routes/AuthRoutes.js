@@ -4,11 +4,11 @@ import AuthController from '../controllers/AuthController.js';
 import PrismaUserRepository from '../../../infrastructure/db/repositories/PrismaUserRepository.js';
 import { registerUserValidation, loginUserValidation } from '../../validations/AuthValidations.js';
 
-import CreateUser from '../../../application/use_cases/CreateUser.js';
-import AuthenticateAndGenerateToken from '../../../application/use_cases/AuthenticateAndGenerateToken.js';
+import CreateUser from '../../../applicaiton/use_cases/CreateUser.js';
+import AuthenticateAndGenerateToken from '../../../applicaiton/use_cases/AuthenticateAndGenerateToken.js';
 
-import PasswordService from '../../../application/services/PasswordService.js';
-import JWTService from '../../../application/services/JWTService.js';
+import PasswordService from '../../../applicaiton/services/PasswordService.js';
+import JWTService from '../../../applicaiton/services/JWTService.js';
 
 const authRouter = express.Router();
 

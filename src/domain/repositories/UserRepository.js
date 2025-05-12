@@ -9,6 +9,10 @@ class UserRepository {
         throw new Error('Method "findByEmail" must be implemented.');
     }
 
+    async findByUsername(username) {
+        throw new Error('Method "findByUsername" must be implemented.');
+    }
+
     async update(id, data) {
         throw new Error('Method "update" must be implemented.');
     }

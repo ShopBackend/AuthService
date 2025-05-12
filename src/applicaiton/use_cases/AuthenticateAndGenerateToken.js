@@ -9,7 +9,7 @@ class AuthenticateAndGenerateToken {
     }
 
     async execute(userData) {
-        validate(userData);
+        userData = validate(userData);
 
         const existingUser = await this.userRepository.findByEmail(userData.email);
 
