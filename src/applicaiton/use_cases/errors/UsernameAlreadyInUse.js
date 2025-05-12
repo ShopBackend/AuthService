@@ -1,8 +1,6 @@
 class UsernameAlreadyInUse extends Error {
-  statusCode;
-
-  constructor(message = 'Username already in use.') {
-    super(message);
+  constructor(username) {
+    super(`Username ${username} is already in use`);
     this.name = 'UsernameAlreadyInUse';
     this.statusCode = 400;
     Object.setPrototypeOf(this, UsernameAlreadyInUse.prototype);

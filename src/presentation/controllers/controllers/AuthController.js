@@ -34,6 +34,7 @@ class AuthController {
             await this.createUser.execute({ username, email, password });
             res.status(201).json({ message: 'User created successfully' });
         } catch (error) {
+            console.error(error.message);
             if (error instanceof EmailAlreadyExists || error instanceof UsernameAlreadyInUse)
                 return res.status(error.statusCode).json({ message: error.message });
             throw error;

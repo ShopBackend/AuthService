@@ -1,8 +1,6 @@
 class EmailAlreadyExists extends Error {
-  statusCode;
-
-  constructor(message = 'Email already in use.') {
-    super(message);
+  constructor(email) {
+    super(`Email ${email} already exists`);
     this.name = 'EmailAlreadyExists';
     this.statusCode = 400;
     Object.setPrototypeOf(this, EmailAlreadyExists.prototype);

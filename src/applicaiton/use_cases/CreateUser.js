@@ -1,4 +1,5 @@
 import EmailAlreadyExists from "./errors/EmailAlreadyExists.js";
+import UniqueConstraintViolation from "../../domain/repositories/violations/UniqueConstraintViolation.js";
 import UsernameAlreadyInUse from "./errors/UsernameAlreadyInUse.js";
 import validate from "../validators/CreateUserValidator.js";
 
@@ -22,7 +23,7 @@ class CreateUser {
         } catch (err) {
             if (err instanceof UniqueConstraintViolation) {
                 if (err.fields.includes('email')) throw new EmailAlreadyExists(userData.email);
-                if (err.fields.includes('username')) throw new UsernameAlreadyInUse(user.username);
+                if (err.fields.includes('username')) throw new UsernameAlreadyInUse(userData.username);
             }
             throw err;
         }

@@ -7,7 +7,7 @@ class EnvironmentLoader {
     constructor(options = {}) {
         this.envPath = path.resolve(options.rootDir || process.cwd(), '.env');
         this.defaults = {
-            DATABASE_URL: 'postgresql://username:password@ip:port/database-name?schema=schema-name',
+            DATABASE_URL: 'postgresql://username:password@ip:port/database-name?schema=schema-name=public',
             NODE_ENV: 'development',
             ACCESS_TOKEN_SECRET: this.generateSecret(),
             REFRESH_TOKEN_SECRET: this.generateSecret(),
