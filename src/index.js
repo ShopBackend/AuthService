@@ -1,4 +1,4 @@
-import Startup from './infrastructure/external/Startup.js';
+import EnvironmentLoader from './infrastructure/external/EnvironmentLoader.js';
 import { prisma } from './shared/PrismaDbConfig.js';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
@@ -6,7 +6,7 @@ import express from 'express';
 import helmet from 'helmet';
 
 dotenv.config();
-new Startup().initialize();
+new EnvironmentLoader().initialize();
 
 const app = express();
 
