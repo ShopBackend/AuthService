@@ -1,7 +1,7 @@
 class InvalidPasswordError extends Error {
-    statusCode: number;
+    statusCode;
 
-    constructor(message: string = 'Password must be at least 8 characters long and maximum 20 characters long.') {
+    constructor(message = 'Password must be at least 8 characters long and maximum 20 characters long.') {
         super(message);
         this.name = 'InvalidPassword';
         this.statusCode = 400;

@@ -1,32 +1,28 @@
-import AuthenticateAndGenerateToken from "../applicaiton/use_cases/AuthenticateAndGenerateToken";
-import CreateUser from "../applicaiton/use_cases/CreateUser";
 import { validationResult } from 'express-validator';
-import EmailAlreadyExists from "../applicaiton/use_cases/errors/EmailAlreadyExists";
-import InvalidAuthentication from "../applicaiton/use_cases/errors/InvalidAuthentication";
+import EmailAlreadyExists from "../applicaiton/use_cases/errors/EmailAlreadyExists.js";
+import InvalidAuthentication from "../applicaiton/use_cases/errors/InvalidAuthentication.js";
 import getMillisecondsFromExpiration from "./utils";
-import { Request, Response } from 'express';
-
 class AuthController {
-    createUser: CreateUser;
-    authenticateAndGenerateToken: AuthenticateAndGenerateToken;
+    createUser;
+    authenticateAndGenerateToken;
 
-    readonly #accessTokenExpiration: string;
-    readonly #refreshTokenExpiration: string;
-    readonly #accessTokenCookieName: string;
-    readonly #refreshTokenCookieName: string;
+    #accessTokenExpiration;
+    #refreshTokenExpiration;
+    #accessTokenCookieName;
+    #refreshTokenCookieName;
 
-    constructor(createUser: CreateUser, authenticateAndGenerateToken: AuthenticateAndGenerateToken) {
+    constructor(createUser, authenticateAndGenerateToken) {
         this.createUser = createUser;
         this.authenticateAndGenerateToken = authenticateAndGenerateToken;
 
-        this.#accessTokenExpiration = process.env.ACCESS_TOKEN_EXPIRATION as string;
-        this.#refreshTokenExpiration = process.env.REFRESH_TOKEN_EXPIRATION as string;
+        this.#accessTokenExpiration = process.env.ACCESS_TOKEN_EXPIRATION;
+        this.#refreshTokenExpiration = process.env.REFRESH_TOKEN_EXPIRATION;
 
-        this.#accessTokenCookieName = process.env.ACCESS_TOKEN_COOKIE_NAME as string;
-        this.#refreshTokenCookieName = process.env.REFRESH_TOKEN_COOKIE_NAME as string;
+        this.#accessTokenCookieName = process.env.ACCESS_TOKEN_COOKIE_NAME;
+        this.#refreshTokenCookieName = process.env.REFRESH_TOKEN_COOKIE_NAME;
     }
 
-    async register(req: Request, res: Response) {
+    async register(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty())
             return res.status(400).json({ errors: errors.array() });
@@ -43,7 +39,7 @@ class AuthController {
         }
     }
 
-    async login(req: Request, res: Response) {
+    async login(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty())
             return res.status(400).json({ errors: errors.array() });
@@ -74,4 +70,4 @@ class AuthController {
     }
 }
 
-export default AuthController;
+module.exports = AuthController;

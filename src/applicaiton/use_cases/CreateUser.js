@@ -1,17 +1,14 @@
-import { IUser } from "../../domain/entities/user";
-import { UserRepository } from "../../domain/repositories/UserRepository";
 import bcrypt from "bcrypt";
-import EmailAlreadyExists from "./errors/EmailAlreadyExists";
-import validate from "../validators/CreateUserValidator";
+import EmailAlreadyExists from "./errors/EmailAlreadyExists.js";
+import validate from "../validators/CreateUserValidator.js";
 
 class CreateUser {
-    private userRepository: UserRepository;
 
-    constructor(userRepository: UserRepository) {
+    constructor(userRepository) {
         this.userRepository = userRepository;
     }
 
-    async execute(user: Omit<IUser, "id">) {
+    async execute(user) {
         validate(user);
         const existingUser = await this.userRepository.findByEmail(user.email);
 

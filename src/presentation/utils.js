@@ -1,5 +1,5 @@
-const getMillisecondsFromExpiration = (expiration: string): number => {
-    const timeValue: number = parseInt(expiration, 10);
+const getMillisecondsFromExpiration = (expiration) => {
+    const timeValue = parseInt(expiration, 10);
     if (expiration.includes('h')) {
         return timeValue * 60 * 60 * 1000;
     }

@@ -1,9 +1,8 @@
-import {UserRepository, UpdateUserData} from '../../../domain/repositories/UserRepository';
-import { prisma } from '../../../shared/PrismaDbConfig';
-import { User, IUser } from '../../../domain/entities/user';
+import { prisma } from '../../../shared/PrismaDbConfig.js';
+import { User } from '../../../domain/entities/user.js';
 
-class SqlUserRepository extends UserRepository {
-    async create(data: Omit<IUser, 'id'>) {
+class SqlUserRepository {
+    async create(data) {
         const user = await prisma.user.create({
             data: {
                 username: data.username,
@@ -15,11 +14,11 @@ class SqlUserRepository extends UserRepository {
         return User.fromObject(user);
     }
 
-    async findByEmail(email: string) {
+    async findByEmail(email) {
         return await prisma.user.findUnique({ where: { email: email } });
     }
 
-    async update(id: string, data: UpdateUserData) {
+    async update(id, data) {
         const user = await prisma.user.update({
             where: { id: id },
             data: {
@@ -32,7 +31,7 @@ class SqlUserRepository extends UserRepository {
         return User.fromObject(user);
     }
 
-    async delete(id: string) {
+    async delete(id) {
         await prisma.user.delete({
             where: { id: id },
         });

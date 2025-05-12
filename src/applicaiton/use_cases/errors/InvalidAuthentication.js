@@ -1,7 +1,7 @@
 class InvalidAuthentication extends Error {
-  statusCode: number;
+  statusCode;
 
-  constructor(message: string = 'Email or password are incorrect') {
+  constructor(message = 'Email or password are incorrect') {
       super(message);
       this.name = 'InvalidAuthentication';
       this.statusCode = 400;

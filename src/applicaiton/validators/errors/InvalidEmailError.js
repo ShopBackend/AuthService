@@ -1,7 +1,7 @@
 class InvalidEmailError extends Error {
-    statusCode: number;
+    statusCode;
 
-    constructor(message: string = 'A valid email is required.') {
+    constructor(message = 'A valid email is required.') {
         super(message);
         this.name = 'InvalidEmailError';
         this.statusCode = 400;

@@ -1,10 +1,9 @@
-import express from 'express';
-import Startup from './infrastructure/external/Startup';
-import { prisma } from './shared/PrismaDbConfig';
-import dotenv from 'dotenv';
+import Startup from './infrastructure/external/Startup.js';
+import { prisma } from './shared/PrismaDbConfig.js';
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import express from 'express';
 import helmet from 'helmet';
-import http from 'http';
 
 dotenv.config();
 new Startup().initialize();
@@ -16,9 +15,9 @@ app.use(cookieParser());
 app.use(helmet());
 
 const PORT = process.env.PORT;
-let server: http.Server;
+let server;
 
-const startServer = async (): Promise<void> => {
+const startServer = async () => {
   try {
     await prisma.$connect();
     console.log('Database connected.');
@@ -27,7 +26,7 @@ const startServer = async (): Promise<void> => {
       console.log(`Auth server running on port ${PORT}`);
     });
 
-  } catch (error: unknown) {
+  } catch (error) {
     if (error instanceof Error) {
       console.error('Failed to start Auth application:', error.message);
       await gracefulShutdown(error);
@@ -38,13 +37,13 @@ const startServer = async (): Promise<void> => {
   }
 };
 
-const gracefulShutdown = async (signalOrError: string | Error): Promise<void> => {
+const gracefulShutdown = async (signalOrError) => {
   const errorMessage = signalOrError instanceof Error ? signalOrError.message : signalOrError;
   console.error('Shutting down due to:', errorMessage);
 
   try {
     if (server) {
-      await new Promise<void>((resolve, reject) => {
+      await new Promise((resolve, reject) => {
         server.close((err) => {
           if (err) return reject(err);
           resolve();
@@ -55,7 +54,7 @@ const gracefulShutdown = async (signalOrError: string | Error): Promise<void> =>
     await prisma.$disconnect();
     console.log('Graceful shutdown completed.');
     process.exit(0);
-  } catch (shutdownError: unknown) {
+  } catch (shutdownError) {
     if (shutdownError instanceof Error) {
       console.error('Error during shutdown:', shutdownError.message);
     } else {

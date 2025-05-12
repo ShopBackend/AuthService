@@ -1,5 +1,5 @@
 class EmailAlreadyExists extends Error {
-  statusCode: number;
+  statusCode;
 
   constructor(message = 'Email already in use.') {
     super(message);
