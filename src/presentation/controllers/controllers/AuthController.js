@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
-import EmailAlreadyExists from "../../../applicaiton/use_cases/errors/EmailAlreadyExists.js";
-import InvalidAuthentication from "../../../applicaiton/use_cases/errors/InvalidAuthentication.js";
+import EmailAlreadyExists from "../../../application/use_cases/errors/EmailAlreadyExists.js";
+import InvalidAuthentication from "../../../application/use_cases/errors/InvalidAuthentication.js";
 import getMillisecondsFromExpiration from "../../Utils.js";
 
 class AuthController {
@@ -71,4 +71,4 @@ class AuthController {
     }
 }
 
-module.exports = AuthController;
+export default AuthController;

@@ -1,4 +1,5 @@
 import EnvironmentLoader from './infrastructure/external/EnvironmentLoader.js';
+import authRouter from './presentation/controllers/routes/AuthRoutes.js';
 import { prisma } from './shared/PrismaDbConfig.js';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
@@ -13,6 +14,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
+
+app.use(authRouter);
 
 const PORT = process.env.PORT;
 let server;

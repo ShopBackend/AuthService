@@ -1,5 +1,5 @@
-import InvalidEmailError from "./errors/InvalidEmailError";
-import InvalidPasswordError from "./errors/InvalidPasswordError";
+import InvalidEmailError from "./errors/InvalidEmailError.js";
+import InvalidPasswordError from "./errors/InvalidPasswordError.js";
 
 function validate(userData) {
     if (!userData.email || !/^\S+@\S+\.\S+$/.test(userData.email))

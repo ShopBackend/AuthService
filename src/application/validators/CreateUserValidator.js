@@ -1,6 +1,6 @@
-import InvalidEmailError from "./errors/InvalidEmailError";
-import InvalidPasswordError from "./errors/InvalidPasswordError";
-import InvalidUserNameError from "./errors/InvalidUserNameError";
+import InvalidEmailError from "./errors/InvalidEmailError.js";
+import InvalidPasswordError from "./errors/InvalidPasswordError.js";
+import InvalidUserNameError from "./errors/InvalidUserNameError.js";
 
 function validate(userData) {
     if (!userData.username || userData.username.trim() === "" || userData.username.length < 3 || userData.username.length > 12)
