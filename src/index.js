@@ -1,6 +1,7 @@
 import EnvironmentLoader from './infrastructure/external/EnvironmentLoader.js';
 import authRouter from './presentation/controllers/routes/AuthRoutes.js';
-import { prisma } from './shared/PrismaDbConfig.js';
+import { prisma } from './infrastructure/db/PrismaDbConfig.js';
+import redisClient from './infrastructure/external/RedisClient.js';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -24,6 +25,8 @@ const startServer = async () => {
   try {
     await prisma.$connect();
     console.log('Database connected.');
+
+    await redisClient.connect();
 
     server = app.listen(PORT, () => {
       console.log(`Auth server running on port ${PORT}`);

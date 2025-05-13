@@ -1,4 +1,4 @@
-import { prisma } from '../../../shared/PrismaDbConfig.js';
+import { prisma } from '../PrismaDbConfig.js';
 import { User } from '../../../domain/entities/user.js';
 import UniqueConstraintViolation from '../../../domain/repositories/violations/UniqueConstraintViolation.js';
 

@@ -8,7 +8,7 @@ class AuthenticateUser {
     }
 
     async execute(userData) {
-        userData = validate(userData);
+        userData = validate(userData); 
 
         const existingUser = await this.userRepository.findByEmail(userData.email);
 

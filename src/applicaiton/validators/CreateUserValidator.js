@@ -6,7 +6,7 @@ function validate(userData) {
     if (!userData.username || userData.username.trim() === "" || userData.username.length < 3 || userData.username.length > 12)
         throw new InvalidUserNameError();
 
-    if (!userData.email || !/^\S+@\S+\.\S+$/.test(userData.email))
+    if (!userData.email || !/^\S+@\S+\.\S+$/.test(userData.email) || userData.email === userData.email.toLowerCase())
         throw new InvalidEmailError();
 
 

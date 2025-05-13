@@ -36,6 +36,8 @@ class AuthController {
 
         try {
             const { username, email, password } = req.body;
+            email = email.toLowerCase();
+
             await this.createUser.execute({ username, email, password });
             res.status(201).json({ message: 'User created successfully' });
         } catch (error) {
@@ -54,7 +56,8 @@ class AuthController {
         try {
             // todo validate tokens, if it's validated then return an error that he is already logged in
             // todo else, login
-            const { email, password } = req.body;
+            const { email , password } = req.body;
+            email = email.toLowerCase();
             const id = await this.authenticateUser.execute({ email, password });
             
             const { accessToken, refreshToken } = await this.generateTokens.execute(id);

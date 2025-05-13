@@ -16,6 +16,10 @@ class EnvironmentLoader {
             ACCESS_TOKEN_COOKIE_NAME: 'access_token',
             REFRESH_TOKEN_COOKIE_NAME: 'refresh_token',
             NODE_ENV: 'development',
+            REDIS_HOST: 'localhost',
+            REDIS_PORT: '6379',
+            REDIS_PASSWORD: 'redis_password',
+            REDIS_DB: '0',
             ...(options.defaults || {}),
         };
     }
