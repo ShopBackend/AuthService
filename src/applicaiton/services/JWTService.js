@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-
+import InvalidTokenError from './errors/InvalidTokenError.js';
+import ExpiredTokenError from './errors/ExpiredTokenError.js';
 class JWTService {
     #accessSecretToken;
     #refreshSecretToken;
@@ -33,13 +34,25 @@ class JWTService {
         return {
             accessToken,
             refreshToken,
+            refreshTokenId,
         };
     }
 
     verify(token, isRefreshToken = false) {
-        const secretKey = isRefreshToken ? this.#refreshSecretToken : this.#accessSecretToken;
-        const decoded = jwt.verify(token, secretKey);
-        return decoded;
+        try {
+            const secretKey = isRefreshToken ? this.#refreshSecretToken : this.#accessSecretToken;
+            const decoded = jwt.verify(token, secretKey);
+            return decoded;
+        } catch (error) {
+            if (error instanceof JsonWebTokenError)
+                throw new InvalidTokenError();
+
+            if (error instanceof TokenExpiredError)
+                throw new ExpiredTokenError();
+
+            throw error;
+        }
+
 
     }
 }

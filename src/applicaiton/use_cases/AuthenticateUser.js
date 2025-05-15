@@ -9,7 +9,6 @@ class AuthenticateUser {
 
     async execute(userData) {
         userData = validate(userData); 
-
         const existingUser = await this.userRepository.findByEmail(userData.email);
 
         if (!existingUser)
@@ -20,8 +19,6 @@ class AuthenticateUser {
         if (!isPasswordValid)
             throw new InvalidAuthentication();
 
-
-        // todo generate tokens and push them to redis (the refresh token)
         return existingUser.id;
     }
 }

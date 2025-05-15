@@ -1,5 +1,3 @@
-import { User } from "../entities/user";
-
 class UserRepository {
     async create(data) {
         throw new Error('Method "create" must be implemented.');

@@ -1,7 +1,7 @@
 import EnvironmentLoader from './infrastructure/external/EnvironmentLoader.js';
-import authRouter from './presentation/controllers/routes/AuthRoutes.js';
+import authRouter from './presentation/routes/AuthRoutes.js';
 import { prisma } from './infrastructure/db/PrismaDbConfig.js';
-import redisClient from './infrastructure/external/RedisClient.js';
+import redisClient from './infrastructure/cache/RedisClient.js';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import express from 'express';

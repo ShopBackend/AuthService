@@ -12,7 +12,6 @@ class EnvironmentLoader {
             REFRESH_TOKEN_SECRET: this.generateSecret(),
             ACCESS_TOKEN_EXPIRATION: '1h',
             REFRESH_TOKEN_EXPIRATION: '7d',
-            PORT: '3001',
             ACCESS_TOKEN_COOKIE_NAME: 'access_token',
             REFRESH_TOKEN_COOKIE_NAME: 'refresh_token',
             NODE_ENV: 'development',
@@ -20,6 +19,8 @@ class EnvironmentLoader {
             REDIS_PORT: '6379',
             REDIS_PASSWORD: 'redis_password',
             REDIS_DB: '0',
+            PORT: '3001',
+
             ...(options.defaults || {}),
         };
     }
