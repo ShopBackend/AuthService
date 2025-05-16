@@ -12,6 +12,7 @@ class EnvironmentLoader {
             REFRESH_TOKEN_SECRET: this.generateSecret(),
             ACCESS_TOKEN_EXPIRATION: '1h',
             REFRESH_TOKEN_EXPIRATION: '7d',
+            SESSION_ID_EXPIRATION_IN_SECONDS: '604800', 
             ACCESS_TOKEN_COOKIE_NAME: 'access_token',
             REFRESH_TOKEN_COOKIE_NAME: 'refresh_token',
             NODE_ENV: 'development',

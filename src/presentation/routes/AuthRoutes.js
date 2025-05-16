@@ -29,7 +29,7 @@ const redisRefreshTokenRepository = new RedisRefreshTokenRepository();
 
 // Services
 const passwordService = new PasswordService();
-const jwtService = new JWTService();``
+const jwtService = new JWTService();
 
 // Use cases
 const createUser = new CreateUser(prismaUserRepository, passwordService);

@@ -7,7 +7,7 @@ class CreateSession {
     constructor(jwtService, refreshTokenCacheRepository) {
         this.jwtService = jwtService;
         this.refreshTokenCacheRepository = refreshTokenCacheRepository;
-        this.#sessionIdExprationInSeconds = getSecondsFromExpiration(process.env.SESSION_ID_EXPIRATION);
+        this.#sessionIdExprationInSeconds = getSecondsFromExpiration(process.env.SESSION_ID_EXPIRATION_IN_SECONDS);
     }
 
     async execute(userId) {
