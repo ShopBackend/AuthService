@@ -3,7 +3,7 @@ import EmailAlreadyExists from "../../applicaiton/use_cases/errors/EmailAlreadyE
 import { validationResult } from 'express-validator';
 
 
-class Register {
+class RegisterController {
     constructor(createUser) {
         this.createUser = createUser;
     }
@@ -28,4 +28,4 @@ class Register {
     }
 }
 
-export default Register;
+export default RegisterController;

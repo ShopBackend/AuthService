@@ -7,3 +7,5 @@ class ClearSession {
         await this.refreshTokenCacheRepository.remove(refreshTokenId);
     }
 }
+
+export default ClearSession;

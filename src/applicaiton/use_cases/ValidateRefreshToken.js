@@ -1,4 +1,4 @@
-import InvalidTokenError from "./errors/InvalidTokenError.js";
+import ExpiredTokenError from "../errors/ExpiredTokenError.js";
 
 class ValidateRefreshToken {
     constructor(jwtService, refreshTokenCacheRepository) {
@@ -7,14 +7,15 @@ class ValidateRefreshToken {
     }
 
     async execute(refreshToken) {
-        const refreshTokenId = this.jwtService.verify(refreshToken, true);
+        const payload = this.jwtService.verify(refreshToken, true);
 
-        if (!refreshTokenId )
-            throw new InvalidTokenError();
-        
+        const refreshTokenId = payload.jti;
         const userId = await this.refreshTokenCacheRepository.get(refreshTokenId);
-        return {userId, refreshTokenId};
 
+        if (!userId)
+            throw new ExpiredTokenError();
+
+        return { userId, refreshTokenId };
     }
 
 }

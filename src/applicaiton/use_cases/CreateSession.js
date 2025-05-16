@@ -1,5 +1,5 @@
 import validate from "../validators/CreateSessionValidator.js";
-import getSecondsFromExpiration from "../utils/getSecondsFromExpiration.js";
+import getSecondsFromExpiration from "../utils/TimeConversions.js";
 
 class CreateSession {
     #sessionIdExprationInSeconds;

@@ -4,11 +4,11 @@ import InvalidEmailError from "../../applicaiton/validators/errors/InvalidEmailE
 import InvalidAuthentication from "../../applicaiton/use_cases/errors/InvalidAuthentication.js";
 import InvalidPasswordError from "../../applicaiton/validators/errors/InvalidPasswordError.js";
 import InvalidIdError from "../../applicaiton/validators/errors/InvalidIdError.js";
-import ExpiredTokenError from "../../applicaiton/services/errors/ExpiredTokenError.js";
-import InvalidTokenError from "../../applicaiton/services/errors/InvalidTokenError.js";
+import ExpiredTokenError from "../../applicaiton/errors/ExpiredTokenError.js";
+import InvalidTokenError from "../../applicaiton/errors/InvalidTokenError.js";
 import { validationResult } from "express-validator";
 
-class Login {
+class LoginController {
     #tokenConfig;
     #isSecure;
 
@@ -37,14 +37,14 @@ class Login {
 
     async execute(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty()) {
+        if (!errors.isEmpty()) 
             return res.status(400).json({ errors: errors.array() });
-        }
+        
 
         const isLoggedIn = await this.#checkLoginStatus(req, res);
-        if (isLoggedIn) {
+        if (isLoggedIn) 
             return res.status(400).json({ message: "You're already logged in." });
-        }
+        
 
         try {
             const email = req.body.email.toLowerCase();
@@ -57,9 +57,9 @@ class Login {
 
             res.status(200).json({ message: 'Login successful' });
         } catch (error) {
-            if (this.#isExpectedAuthError(error)) {
+            if (this.#isExpectedAuthError(error)) 
                 return res.status(error.statusCode).json({ message: error.message });
-            }
+            
             throw error;
         }
     }
@@ -73,9 +73,9 @@ class Login {
                 await this.validateAccessToken.execute(accessToken);
                 return true;
             } catch (error) {
-                if (!this.#isTokenError(error)) {
+                if (!this.#isTokenError(error)) 
                     throw error;
-                }
+                
                 clearCookie(res, this.#tokenConfig.access.cookieName, this.#isSecure);
             }
         }
@@ -91,9 +91,9 @@ class Login {
                 this.#setAuthCookies(res, newAccessToken, newRefreshToken);
                 return true;
             } catch (error) {
-                if (!this.#isTokenError(error)) {
+                if (!this.#isTokenError(error)) 
                     throw error;
-                }
+                
                 clearCookie(res, this.#tokenConfig.access.cookieName, this.#isSecure);
                 clearCookie(res, this.#tokenConfig.refresh.cookieName, this.#isSecure);
             }
@@ -134,4 +134,4 @@ class Login {
     }
 }
 
-export default Login;
+export default LoginController;

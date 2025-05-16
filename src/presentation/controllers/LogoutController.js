@@ -1,6 +1,6 @@
 import { clearCookie } from "../utils/Cookies.js";
 
-class Logout {
+class LogoutController {
     #accessTokenCookieName;
     #refreshTokenCookieName;
 
@@ -23,4 +23,4 @@ class Logout {
     }
 }
 
-export default Logout;
+export default LogoutController;

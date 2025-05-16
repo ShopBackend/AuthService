@@ -1,4 +1,4 @@
-class RedisRefreshTokenCacheRepository {
+class RedisRefreshTokenRepository {
     constructor(redisClient) {
         this.redisClient = redisClient;
     }
@@ -24,3 +24,4 @@ class RedisRefreshTokenCacheRepository {
     }
 
 }
+export default RedisRefreshTokenRepository;
