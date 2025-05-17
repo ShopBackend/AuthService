@@ -4,7 +4,7 @@ class RedisRefreshTokenRepository {
     }
 
     #buildTokenKey(refreshTokenId) {
-        return `refresh_token:${refreshTokenId}`;
+        return `refresh_token_id:${refreshTokenId}`;
     }
 
     async set(refreshTokenId, userId, expiresInSeconds) {

@@ -23,6 +23,7 @@ class LoginController {
 
         this.#tokenConfig.access.expiration = getMillisecondsFromExpiration(this.#tokenConfig.access.expiration);
         this.#tokenConfig.refresh.expiration = getMillisecondsFromExpiration(this.#tokenConfig.refresh.expiration);
+        console.log(this.#tokenConfig);
 
         this.#isSecure = isProduction;
     }
@@ -32,17 +33,12 @@ class LoginController {
         if (!errors.isEmpty())
             return res.status(400).json({ errors: errors.array() });
 
-
-        const isLoggedIn = await this.#checkLoginStatus(req, res);
-        if (isLoggedIn)
-            return res.status(400).json({ message: "You're already logged in." });
-
-
         try {
             const email = req.body.email.toLowerCase();
             const password = req.body.password;
 
             const userId = await this.authenticateUser.execute({ email, password });
+
             const { accessToken, refreshToken } = await this.createSession.execute(userId);
 
             this.#setAuthCookies(res, accessToken, refreshToken);
@@ -54,44 +50,6 @@ class LoginController {
 
             throw error;
         }
-    }
-
-    async #checkLoginStatus(req, res) {
-        const accessToken = req.cookies?.[this.#tokenConfig.access.cookieName];
-        const refreshToken = req.cookies?.[this.#tokenConfig.refresh.cookieName];
-
-        if (accessToken) {
-            try {
-                await this.validateAccessToken.execute(accessToken);
-                return true;
-            } catch (error) {
-                if (!this.#isTokenError(error))
-                    throw error;
-
-                clearCookie(res, this.#tokenConfig.access.cookieName, this.#isSecure);
-            }
-        }
-
-        if (refreshToken) {
-            try {
-                const { userId, refreshTokenId } = await this.validateRefreshToken.execute(refreshToken);
-                await this.clearSession.execute(refreshTokenId);
-
-                const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-                    await this.createSession.execute(userId);
-
-                this.#setAuthCookies(res, newAccessToken, newRefreshToken);
-                return true;
-            } catch (error) {
-                if (!this.#isTokenError(error))
-                    throw error;
-
-                clearCookie(res, this.#tokenConfig.access.cookieName, this.#isSecure);
-                clearCookie(res, this.#tokenConfig.refresh.cookieName, this.#isSecure);
-            }
-        }
-
-        return false;
     }
 
     #setAuthCookies(res, accessToken, refreshToken) {
@@ -109,6 +67,7 @@ class LoginController {
             this.#tokenConfig.refresh.expiration,
             this.#isSecure
         );
+
     }
 
     #isExpectedAuthError(error) {

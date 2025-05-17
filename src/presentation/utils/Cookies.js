@@ -7,8 +7,8 @@ function setCookie(res, name, value, maxAge, isSecure = true) {
     });
 };
 
-function clearCookie(res, name, value, isSecure = true) {
-    res.clearCookie(name, value, {
+function clearCookie(res, name, isSecure = true) {
+    res.clearCookie(name, {
         httpOnly: true,
         secure: isSecure,
         sameSite: 'Lax'

@@ -13,7 +13,7 @@ class CreateSession {
     async execute(userId) {
         validate(userId);
 
-        const { accessToken, refreshToken, refreshTokenId } = this.jwtService.generateTokens(userID);
+        const { accessToken, refreshToken, refreshTokenId } = this.jwtService.generateTokens(userId);
 
         await this.refreshTokenCacheRepository.set(refreshTokenId, userId, this.#sessionIdExprationInSeconds)
         return { accessToken, refreshToken };

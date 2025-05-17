@@ -8,7 +8,7 @@ class PrismaUserRepository {
 
     async create(data) {
         try {
-            const user = await prisma.user.create({
+            const user = await this.prisma.user.create({
                 data: {
                     username: data.username,
                     email: data.email,
@@ -29,15 +29,15 @@ class PrismaUserRepository {
     }
 
     async findByEmail(email) {
-        return await prisma.user.findUnique({ where: { email: email } });
+        return await this.prisma.user.findUnique({ where: { email: email } });
     }
 
     async findByUsername(username) {
-        return await prisma.user.findUnique({ where: { username: username } });
+        return await this.prisma.user.findUnique({ where: { username: username } });
     }
 
     async update(id, data) {
-        const user = await prisma.user.update({
+        const user = await this.prisma.user.update({
             where: { id: id },
             data: {
                 username: data.username,
@@ -50,7 +50,7 @@ class PrismaUserRepository {
     }
 
     async delete(id) {
-        await prisma.user.delete({
+        await this.prisma.user.delete({
             where: { id: id },
         });
     }

@@ -25,12 +25,8 @@ class JWTService {
             expiresIn: this.#accessTokenExpiration,
         });
 
-        const refreshTokenPayload = {
-            userId,
-            jti: refreshTokenId,
-        };
 
-        const refreshToken = jwt.sign(refreshTokenPayload, this.#refreshSecretToken, {
+        const refreshToken = jwt.sign({ refreshTokenId }, this.#refreshSecretToken, {
             expiresIn: this.#refreshTokenExpiration,
         });
 

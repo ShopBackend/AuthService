@@ -40,7 +40,7 @@ class AuthRoutes {
 
         const loginController = new LoginController(this.envrionment.getTokenConfig(true, true, false), this.envrionment.isProduction, authenticateUser, validateAccessToken, validateRefreshToken, createSession, clearSession);
         const registerController = new RegisterController(createUser);
-        const logoutController = new LogoutController(this.envrionment.getTokenConfig(false, false, true));
+        const logoutController = new LogoutController(this.envrionment.getTokenConfig(true, false, false), this.envrionment.isProduction, clearSession, validateRefreshToken);
 
         this.router.post('/login', loginUserValidation, loginController.execute.bind(loginController));
         this.router.post('/register', registerUserValidation, registerController.execute.bind(registerController));
