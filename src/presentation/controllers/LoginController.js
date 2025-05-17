@@ -12,39 +12,31 @@ class LoginController {
     #tokenConfig;
     #isSecure;
 
-    constructor(authenticateUser, validateAccessToken, validateRefreshToken, createSession, clearSession) {
+    constructor(tokenConfig, isProduction, authenticateUser, validateAccessToken, validateRefreshToken, createSession, clearSession) {
+        this.#tokenConfig = tokenConfig;
+
         this.authenticateUser = authenticateUser;
         this.validateAccessToken = validateAccessToken;
         this.validateRefreshToken = validateRefreshToken;
         this.createSession = createSession;
         this.clearSession = clearSession;
 
-        this.#tokenConfig = {
-            access: {
-                cookieName: process.env.ACCESS_TOKEN_COOKIE_NAME,
-                expiration: process.env.ACCESS_TOKEN_EXPIRATION,
-                expirationMs: getMillisecondsFromExpiration(process.env.ACCESS_TOKEN_EXPIRATION),
-            },
-            refresh: {
-                cookieName: process.env.REFRESH_TOKEN_COOKIE_NAME,
-                expiration: process.env.REFRESH_TOKEN_EXPIRATION,
-                expirationMs: getMillisecondsFromExpiration(process.env.REFRESH_TOKEN_EXPIRATION),
-            }
-        };
+        this.#tokenConfig.access.expiration = getMillisecondsFromExpiration(this.#tokenConfig.access.expiration);
+        this.#tokenConfig.refresh.expiration = getMillisecondsFromExpiration(this.#tokenConfig.refresh.expiration);
 
-        this.#isSecure = process.env.NODE_ENV === 'production';
+        this.#isSecure = isProduction;
     }
 
     async execute(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty()) 
+        if (!errors.isEmpty())
             return res.status(400).json({ errors: errors.array() });
-        
+
 
         const isLoggedIn = await this.#checkLoginStatus(req, res);
-        if (isLoggedIn) 
+        if (isLoggedIn)
             return res.status(400).json({ message: "You're already logged in." });
-        
+
 
         try {
             const email = req.body.email.toLowerCase();
@@ -57,9 +49,9 @@ class LoginController {
 
             res.status(200).json({ message: 'Login successful' });
         } catch (error) {
-            if (this.#isExpectedAuthError(error)) 
+            if (this.#isExpectedAuthError(error))
                 return res.status(error.statusCode).json({ message: error.message });
-            
+
             throw error;
         }
     }
@@ -73,9 +65,9 @@ class LoginController {
                 await this.validateAccessToken.execute(accessToken);
                 return true;
             } catch (error) {
-                if (!this.#isTokenError(error)) 
+                if (!this.#isTokenError(error))
                     throw error;
-                
+
                 clearCookie(res, this.#tokenConfig.access.cookieName, this.#isSecure);
             }
         }
@@ -91,9 +83,9 @@ class LoginController {
                 this.#setAuthCookies(res, newAccessToken, newRefreshToken);
                 return true;
             } catch (error) {
-                if (!this.#isTokenError(error)) 
+                if (!this.#isTokenError(error))
                     throw error;
-                
+
                 clearCookie(res, this.#tokenConfig.access.cookieName, this.#isSecure);
                 clearCookie(res, this.#tokenConfig.refresh.cookieName, this.#isSecure);
             }
@@ -107,14 +99,14 @@ class LoginController {
             res,
             this.#tokenConfig.access.cookieName,
             accessToken,
-            this.#tokenConfig.access.expirationMs,
+            this.#tokenConfig.access.expiration,
             this.#isSecure
         );
         setCookie(
             res,
             this.#tokenConfig.refresh.cookieName,
             refreshToken,
-            this.#tokenConfig.refresh.expirationMs,
+            this.#tokenConfig.refresh.expiration,
             this.#isSecure
         );
     }

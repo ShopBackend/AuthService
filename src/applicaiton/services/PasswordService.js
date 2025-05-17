@@ -3,7 +3,7 @@ import PasswordHashingError from './errors/PasswordHashingError.js';
 import PasswordVerificationError from './errors/PasswordVerificationError.js';
 
 class PasswordVerificationService {
-    #saltRounds = 10;
+    #saltRounds;
 
     constructor(saltRounds = 10) {
         if (saltRounds < 10)

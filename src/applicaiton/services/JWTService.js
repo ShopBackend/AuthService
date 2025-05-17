@@ -3,17 +3,19 @@ import crypto from 'crypto';
 import InvalidTokenError from '../errors/InvalidTokenError.js';
 import ExpiredTokenError from '../errors/ExpiredTokenError.js';
 
+const { JsonWebTokenError, TokenExpiredError } = jwt;
+
 class JWTService {
     #accessSecretToken;
     #refreshSecretToken;
     #accessTokenExpiration;
     #refreshTokenExpiration;
 
-    constructor() {
-        this.#accessSecretToken = process.env.ACCESS_TOKEN_SECRET;
-        this.#refreshSecretToken = process.env.REFRESH_TOKEN_SECRET;
-        this.#accessTokenExpiration = process.env.ACCESS_TOKEN_EXPIRATION;
-        this.#refreshTokenExpiration = process.env.REFRESH_TOKEN_EXPIRATION;
+    constructor(tokenConfig) {
+        this.#accessSecretToken = tokenConfig.access.secret;
+        this.#refreshSecretToken = tokenConfig.refresh.secret;
+        this.#accessTokenExpiration = tokenConfig.access.expiration;
+        this.#refreshTokenExpiration = tokenConfig.refresh.expiration;
     }
 
     generateTokens(userId) {

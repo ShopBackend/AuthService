@@ -6,11 +6,11 @@ class LogoutController {
 
     #isSecure;
 
-    constructor() {
-        this.#accessTokenCookieName = process.env.ACCESS_TOKEN_COOKIE_NAME;
-        this.#refreshTokenCookieName = process.env.REFRESH_TOKEN_COOKIE_NAME;
+    constructor(tokenConfig, isProduction) {
+        this.#accessTokenCookieName = tokenConfig.access.cookieName;
+        this.#refreshTokenCookieName = tokenConfig.refresh.cookieName;
 
-        this.#isSecure = process.env.NODE_ENV === 'production';
+        this.#isSecure = isProduction;
     }
 
     async execute(req, res) {

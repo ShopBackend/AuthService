@@ -1,24 +1,46 @@
-import EnvironmentLoader from './infrastructure/external/EnvironmentLoader.js';
-import authRouter from './presentation/routes/AuthRoutes.js';
-import { prisma } from './infrastructure/db/PrismaDbConfig.js';
-import redisClient from './infrastructure/cache/RedisClient.js';
-import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
 import express from 'express';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import { PrismaClient } from '@prisma/client';
 
-dotenv.config();
-new EnvironmentLoader().initialize();
+import Envrionment from './infrastructure/external/Envrionment.js';
+import createRedisClient from './infrastructure/cache/RedisClient.js';
+
+import generateCorsMiddleware from './presentation/middleware/CorsMiddleware.js';
+import AuthRoutes from './presentation/routes/AuthRoutes.js';
+
+import PrismaUserRepository from './infrastructure/db/repositories/PrismaUserRepository.js';
+import RedisRefreshTokenRepository from './infrastructure/cache/repositories/RedisRefreshTokenRepository.js';
+
+const enviornment = new Envrionment();
+enviornment.initialize();
+
+const redisClient = createRedisClient(enviornment);
+const prisma = new PrismaClient();
+
+const prismaUserRepository = new PrismaUserRepository(prisma);
+const redisRefreshTokenRepository = new RedisRefreshTokenRepository(redisClient);
+
+const authRoutes = new AuthRoutes(prismaUserRepository, redisRefreshTokenRepository, enviornment);
+
+redisClient.on('connect', () => {
+  console.log('Redis client connected');
+});
+
+redisClient.on('error', (err) => {
+  throw err;
+});
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
+app.use(generateCorsMiddleware(enviornment.allowedOrigins, enviornment.isProduction));
 
-app.use('/auth', authRouter);
+app.use('/auth', authRoutes.getRouter());
 
-const PORT = process.env.PORT;
+const PORT = enviornment.port;
 let server;
 
 const startServer = async () => {
@@ -33,13 +55,8 @@ const startServer = async () => {
     });
 
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('Failed to start Auth application:', error.message);
-      await gracefulShutdown(error);
-    } else {
-      console.error('An unknown error during server start:', error);
-      await gracefulShutdown('Unknown error');
-    }
+    console.error('Failed to start Auth application:', error instanceof Error ? error.message : error);
+    await gracefulShutdown(error);
   }
 };
 
@@ -60,11 +77,7 @@ const gracefulShutdown = async (signalOrError) => {
     console.log('Graceful shutdown completed.');
     process.exit(0);
   } catch (shutdownError) {
-    if (shutdownError instanceof Error) {
-      console.error('Error during shutdown:', shutdownError.message);
-    } else {
-      console.error('Unknown error during shutdown:', shutdownError);
-    }
+    console.error('Error during shutdown:', shutdownError instanceof Error ? shutdownError.message : shutdownError);
     process.exit(1);
   }
 };

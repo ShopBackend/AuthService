@@ -1,8 +1,11 @@
-import { prisma } from '../PrismaDbConfig.js';
 import { User } from '../../../domain/entities/user.js';
 import UniqueConstraintViolation from '../../../domain/repositories/violations/UniqueConstraintViolation.js';
 
 class PrismaUserRepository {
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
+
     async create(data) {
         try {
             const user = await prisma.user.create({
@@ -18,9 +21,9 @@ class PrismaUserRepository {
 
         catch (err) {
             const isUniqueConstraintError = err.code === 'P2002';
-            if (isUniqueConstraintError) 
+            if (isUniqueConstraintError)
                 throw new UniqueConstraintViolation(err.meta?.target || []);
-            
+
             throw err;
         }
     }

@@ -1,5 +1,8 @@
 import UsernameAlreadyInUse from "../../applicaiton/use_cases/errors/UsernameAlreadyInUse.js";
 import EmailAlreadyExists from "../../applicaiton/use_cases/errors/EmailAlreadyExists.js";
+import InvalidUserNameError from "../../applicaiton/validators/errors/InvalidUserNameError.js";
+import InvalidEmailError from "../../applicaiton/validators/errors/InvalidEmailError.js";
+import InvalidPasswordError from "../../applicaiton/validators/errors/InvalidPasswordError.js";
 import { validationResult } from 'express-validator';
 
 
@@ -15,16 +18,18 @@ class RegisterController {
 
         try {
             const { username, email, password } = req.body;
-            email = email.toLowerCase();
 
             await this.createUser.execute({ username, email, password });
             res.status(201).json({ message: 'User created successfully' });
         } catch (error) {
-            if (error instanceof EmailAlreadyExists || error instanceof UsernameAlreadyInUse)
+            if (error instanceof EmailAlreadyExists || error instanceof UsernameAlreadyInUse ||
+                error instanceof InvalidUserNameError || error instanceof InvalidEmailError ||
+                error instanceof InvalidPasswordError) {
                 return res.status(error.statusCode).json({ message: error.message });
-            throw error;
-        }
+                throw error;
+            }
 
+        }
     }
 }
 

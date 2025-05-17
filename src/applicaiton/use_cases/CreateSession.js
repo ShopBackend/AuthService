@@ -4,10 +4,10 @@ import getSecondsFromExpiration from "../utils/TimeConversions.js";
 class CreateSession {
     #sessionIdExprationInSeconds;
 
-    constructor(jwtService, refreshTokenCacheRepository) {
+    constructor(jwtService, refreshTokenCacheRepository,sessionIdExpirationInSeconds) {
         this.jwtService = jwtService;
         this.refreshTokenCacheRepository = refreshTokenCacheRepository;
-        this.#sessionIdExprationInSeconds = getSecondsFromExpiration(process.env.SESSION_ID_EXPIRATION_IN_SECONDS);
+        this.#sessionIdExprationInSeconds = sessionIdExpirationInSeconds;
     }
 
     async execute(userId) {

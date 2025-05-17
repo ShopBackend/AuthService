@@ -16,7 +16,7 @@ const registerUserValidation = [
 const loginUserValidation = [
     body('email')
         .isEmail().withMessage('Invalid email')
-        .normalizeEmail(),
+        .normalizeEmail().toLowerCase(),
     body('password')
         .notEmpty().withMessage('Password is required')
         .isLength({ min: 8, max: 20 }).withMessage('Password must be at least 8 characters and maximum 20 characters')
